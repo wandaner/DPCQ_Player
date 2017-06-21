@@ -1,31 +1,41 @@
 package com.situ.com.dpcq_player;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.situ.com.com.situ.com.Contants.Utils;
+import com.situ.com.db.DBHelper;
+
+import java.lang.ref.WeakReference;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean isFristStart = false;
     private TextView tv = null;
+    private DBHelper dbHelper;
+    private StringBuffer buffer = new StringBuffer();
+    public Handler mHandler;
+    private int count = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = (TextView)findViewById(R.id.tv);
         tv.setMovementMethod(ScrollingMovementMethod.getInstance());
-//        Log.e("xukai",UrlGetUtil.Union2String("*104*116*116*112*58*47*47*119*116*105*110*103*46*105*110*102*111*58*56*49*47*97*115*100*98*47*102*105*99*116*105*111*110*47*120*117*97*110*104*117*97*110*47*100*111*117*112*111*99*113*47*55*117*49*48*56*52*52*120*46*109*112*51*38*49*49*50*57*38*109*112*51"));
-//        tv.setText(UrlGetUtil.Union2String("*104*116*116*112*58*47*47*119*116*105*110*103*46*105*110*102*111*58*56*49*47*97*115*100*98*47*102*105*99*116*105*111*110*47*120*117*97*110*104*117*97*110*47*100*111*117*112*111*99*113*47*55*117*49*48*56*52*52*120*46*109*112*51*38*49*49*50*57*38*109*112*51"));
-        initSQLite();
-
-
+        tv.setText("----");
     }
-    public void getAllUrl(){
-//        SQLiteDatabase db = openOrCreateDatabase("basic.db", Context.MODE_PRIVATE, null);
-        for(int i=1;i<10;i++){
+    public void getAllUrl(int n){
+        for(int i=1;i<=n;i++){
             getStr(i);
         }
     }
@@ -33,34 +43,51 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getAllUrl();
+        if(!isFristStart){
+            mHandler = new MainActivity.ActivityHandler(this);
+            dbHelper = DBHelper.getInstance(this);
+//            getAllUrl();
+            UrlGetUtil.GetCountByZero(mHandler);
+            isFristStart=!isFristStart;
+        }
     }
 
     public void getStr(int id){
-        UrlGetUtil.GetHtmlInfo(id,new ICallBack() {
-            @Override
-            public void success(int id,String str) {
-//                tv.setText(str+"");
-//                db.execSQL("INSERT INTO table_url VALUES (?, ?)", new Object[]{id, str});
-                  Log.e("xu_kai",id+": "+str);
-            }
+        UrlGetUtil.GetUrlById(id,mHandler);
+    }
+    public void handleMessage(Message msg){
+        switch (msg.what){
+            case Utils.MSG_GETURL_SUCCESS:
+                if(msg!=null&&msg.obj!=null){
+                    count++;
+                    dbHelper.addOrUpdateURLData(msg.arg1+"",(String)msg.obj);
+                    if(count>=1029){
+                        tv.setText(dbHelper.getURLData());
+                    }
 
-            @Override
-            public void failed(String msg) {
-                tv.setText(msg);
-            }
+                }
+                break;
+            case Utils.MSG_GETCOUNT_SUCCESS:
+                getAllUrl(msg.arg1);
+                break;
+        }
 
-        });
     }
-    public void initSQLite(){
-        SQLiteDatabase db = openOrCreateDatabase("basic.db", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS table_url (id INTEGER PRIMARY KEY, url VARCHAR)");
-        db.close();
+    private static class ActivityHandler extends Handler{
+        WeakReference<MainActivity> mRefActivity;
+        MainActivity activity;
+        private ActivityHandler(MainActivity activity){
+            this.mRefActivity = new WeakReference<MainActivity>(activity);
+            if(mRefActivity != null) {
+                this.activity = (MainActivity)this.mRefActivity.get();
+            }
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if(activity != null){
+                activity.handleMessage(msg);
+            }
+        }
     }
-    public void insert(int id,String url){
-        SQLiteDatabase db = openOrCreateDatabase("basic.db", Context.MODE_PRIVATE, null);
-        db.execSQL("INSERT INTO table_url VALUES (?, ?)", new Object[]{id, url});
-        db.close();
-    }
-    
 }

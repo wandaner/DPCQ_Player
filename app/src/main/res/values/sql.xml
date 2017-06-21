@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- 本地数据库sql -->
+ 	<string-array name="sql_ct">
+        <item>create table if not exists UrlData(id integer PRIMARY KEY, url text)</item>
+    </string-array>
+    <!-- select -->
+    <string-array name="sql_sl">
+        <item>select url from UrlData where url = ?</item>
+        <item>select * from UrlData</item>
+    </string-array>
+    <!-- insert -->
+    <string-array name="sql_in">
+        <item>insert into UrlData (id, url) values(?, ?)</item>
+    </string-array>
+    <!-- update -->
+    <string-array name="sql_up">
+        <item>update UrlData set url =? where id =? </item>
+    </string-array>
+    <!-- delete -->
+ 	<!-- table end -->
+</resources>
