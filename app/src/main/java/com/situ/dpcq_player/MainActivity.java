@@ -6,9 +6,9 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.situ.Contants.Utils;
-import com.situ.com.dpcq_player.R;
 import com.situ.db.DBHelper;
 import com.situ.net.UrlGetUtil;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setText("----");
     }
     public void getAllUrl(int n){
-        for(int i=1;i<=n;i++){
+        for(int i=1;i<=10;i++){
             getStr(i);
         }
     }
@@ -58,13 +58,14 @@ public class MainActivity extends AppCompatActivity {
                 if(msg!=null&&msg.obj!=null){
                     count++;
                     dbHelper.addOrUpdateURLData(msg.arg1+"",(String)msg.obj);
-                    if(count>=1029){
+//                    if(count>=1029){
                         tv.setText(dbHelper.getURLData());
-                    }
+//                    }
 
                 }
                 break;
             case Utils.MSG_GETCOUNT_SUCCESS:
+                Toast.makeText(this,msg.arg1+"",Toast.LENGTH_LONG).show();
                 getAllUrl(msg.arg1);
                 break;
         }
