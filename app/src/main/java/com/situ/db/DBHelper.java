@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.situ.com.dpcq_player.R;
+import com.situ.dpcq_player.R;
 
 
 /**
