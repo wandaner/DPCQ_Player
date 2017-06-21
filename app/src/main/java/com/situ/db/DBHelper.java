@@ -1,4 +1,4 @@
-package com.situ.com.db;
+package com.situ.db;
 
 import android.content.Context;
 import android.database.Cursor;

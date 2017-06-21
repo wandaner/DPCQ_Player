@@ -1,4 +1,4 @@
-package com.situ.com.com.situ.com.Contants;
+package com.situ.Contants;
 
 /**
  * Created by rrdev on 2017/6/21.

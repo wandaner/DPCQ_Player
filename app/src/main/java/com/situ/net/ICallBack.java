@@ -1,4 +1,4 @@
-package com.situ.com.dpcq_player;
+package com.situ.net;
 
 /**
  * Created by rrdev on 2017/6/7.

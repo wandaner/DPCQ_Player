@@ -1,10 +1,11 @@
-package com.situ.com.dpcq_player;
+package com.situ.net;
 
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.situ.com.com.situ.com.Contants.Utils;
+
+import com.situ.Contants.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

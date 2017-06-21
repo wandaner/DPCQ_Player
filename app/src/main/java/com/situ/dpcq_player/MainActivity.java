@@ -1,19 +1,16 @@
-package com.situ.com.dpcq_player;
+package com.situ.dpcq_player;
 
-import android.app.Activity;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.situ.com.com.situ.com.Contants.Utils;
-import com.situ.com.db.DBHelper;
+import com.situ.Contants.Utils;
+import com.situ.com.dpcq_player.R;
+import com.situ.db.DBHelper;
+import com.situ.net.UrlGetUtil;
 
 import java.lang.ref.WeakReference;
 
